@@ -15,9 +15,7 @@ HEADER	=	libft.h
 CC		=	gcc
 FLAGS	=	-Wall -Werror -Wextra
 SRC		=	ft_atoi.c \
-			ft_bzero.c \
-			ft_memalloc.c \
-			ft_memset.c \
+			ft_strdup.c \
 			ft_strjoin.c \
 			ft_strlen.c \
 			ft_strncpy.c \

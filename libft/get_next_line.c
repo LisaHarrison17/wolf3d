@@ -12,66 +12,76 @@
 
 #include "libft.h"
 
-static int		ft_read(char **str, int fd)
+static int			check_line(char **stack, char **line)
 {
-	int			r;
-	char		*s;
-	char		buf[BUFF_SIZE + 1];
-
-	if ((r = read(fd, buf, BUFF_SIZE)) == -1)
-		return (-1);
-	buf[r] = '\0';
-	s = *str;
-	*str = ft_strjoin(*str, buf);
-	if (*s)
-		free(s);
-	return (r);
-}
-
-static int		ft_get(char **str, char **line, char *s)
-{
-	int			i;
-	char		*j;
+	char			*tmp;
+	char			*str;
+	int				i;
 
 	i = 0;
-	if (*s == '\n')
-		i = 1;
-	*s = 0;
-	*line = ft_strjoin("", *str);
-	if (i == 0 && ft_strlen(*str) != 0)
+	str = *stack;
+	while (str[i] != '\n')
+		if (!str[i++])
+			return (0);
+	tmp = &str[i];
+	*tmp = '\0';
+	*line = ft_strdup(*stack);
+	*stack = ft_strdup(tmp + 1);
+	free(str);
+	return (1);
+}
+
+static	int			read_file(int fd, char *heap, char **stack, char **line)
+{
+	int				ret;
+	char			*tmp;
+
+	while ((ret = read(fd, heap, BUFF_SIZE)) > 0)
 	{
-		return (1);
+		heap[ret] = '\0';
+		if (*stack)
+		{
+			tmp = *stack;
+			*stack = ft_strjoin(tmp, heap);
+			free(tmp);
+			tmp = NULL;
+		}
+		else
+			*stack = ft_strdup(heap);
+		if (check_line(stack, line))
+			break ;
 	}
-	else if (i == 0 && !(ft_strlen(*str)))
-		return (0);
-	j = *str;
-	*str = ft_strjoin(s + 1, "");
-	free(j);
-	return (i);
+	if(ret > 0)
+		return (1);
+	else
+		return (ret);
 }
 
 int				get_next_line(const int fd, char **line)
 {
-	int			r;
-	char		*s;
-	static char *str;
+	static char		*stack[MAX_FD];
+	char			*heap;
+	int				ret;
+	int				i;
 
-	if (str == 0)
-		str = "";
-	if (!line || BUFF_SIZE < 1 || fd < 0)
+	if (!line || (fd < 0 || fd >= MAX_FD) || (read(fd, stack[fd], 0) < 0) \
+		|| !(heap = (char *)malloc(sizeof(char) * BUFF_SIZE + 1)))
 		return (-1);
-	r = BUFF_SIZE;
-	while (line)
+	if (stack[fd])
+		if (check_line(&stack[fd], line))
+			return (1);
+	i = 0;
+	while (i < BUFF_SIZE)
+		heap[i++] = '\0';
+	ret = read_file(fd, heap, &stack[fd], line);
+	free(heap);
+	if (ret != 0 || stack[fd] == NULL || stack[fd][0] == '\0')
 	{
-		s = str;
-		while (*s || r < BUFF_SIZE)
-		{
-			if (*s == '\n' || *s == 0 || *s == -1)
-				return (ft_get(&str, line, s));
-			s++;
-		}
-		if ((r = ft_read(&str, fd)) == -1)
-			return (-1);
+		if (!ret && *line)
+			*line = NULL;
+		return (ret);
 	}
-	return (0);
+	*line = stack[fd];
+	stack[fd] = NULL;
+	return (1);
 }
