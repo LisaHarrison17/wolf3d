@@ -18,15 +18,10 @@ SRC		=	ft_atoi.c \
 			ft_bzero.c \
 			ft_memalloc.c \
 			ft_memset.c \
-			ft_strcat.c \
-			ft_strclr.c \
-			ft_strcpy.c \
 			ft_strjoin.c \
 			ft_strlen.c \
 			ft_strncpy.c \
-			ft_strnew.c \
 			ft_strsplit.c \
-			ft_strsub.c \
 			get_next_line.c
 
 all:		$(NAME)

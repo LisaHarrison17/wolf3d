@@ -62,6 +62,7 @@ void	        move_right(t_env *z);
 void	        move_left(t_env *z);
 void	        move_down(t_env *z);
 void	        move_up(t_env *z);
+int				count(char **str);
 
 
 #endif

@@ -12,8 +12,6 @@ void	colours(t_env *z)
 		z->line_color = 0x00B8FFFF;
 	if (z->arr[z->mapy][z->mapx] == 5)
 		z->line_color = 0x00B8FF9D;
-	if (z->side == 1)
-		z->line_color = z->line_color / 2;
 	while (z->y < HEIGHT)
 	{
 		if (z->y <= z->drawstart)
