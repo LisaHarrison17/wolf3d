@@ -23,15 +23,7 @@ typedef struct	s_env
 	int			size_l;
 	int			bpp;
 	int			endian;
-	int			*data2;
-	int			size_l2;
-	int			bpp2;
-	int			endian2;
-	int			step_x;
-	int			step_y;
 	int			line_color;
-	int			mapwidth;
-	int			mapheight;
 	int			x;
 	int			y;
 	double		h;
@@ -61,8 +53,6 @@ typedef struct	s_env
 	int			lineheight;
 	int			drawstart;
 	int			drawend;
-	int			worldmap;
-	char		*file;
 }				t_env;
 
 char	        **read_map(char *filename);

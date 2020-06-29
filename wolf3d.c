@@ -1,8 +1,31 @@
 #include "wolf3d.h"
 
+void	ft_bye(t_env *z)
+{
+	int	a;
+
+	a = 0;
+	while(a < 25)
+	{
+		if (z->map[a])
+			free(z->map[a]);
+		a++;
+	}
+	free(z->map);
+	a = 0;
+	while(a < 24)
+	{
+		if (z->arr[a])
+			free(z->arr[a]);
+		a++;
+	}
+	free(z->arr);
+}
+
 int		exit_game(t_env *z)
 {
 	mlx_destroy_window(z->mlx, z->win);
+	ft_bye(z);
 	exit(0);
 	return (0);
 }
@@ -30,8 +53,7 @@ int		my_key_funct(int keycode, t_env *z)
 {
 	if (keycode == 53)
 	{
-		mlx_destroy_window(z->mlx, z->win);
-		exit(0);
+		exit_game(z);
 	}
 	if (keycode == 3)
 	{
@@ -73,7 +95,6 @@ int		main(int argc, char **argv)
 		mlx_loop(z->mlx);
 	}
 	else
-		write(1, "BIG NOPE - only map file accepted.", 12);
-	free(z);
+		write(1, "BIG NOPE - only map file accepted.\n", 35);
 	return (0);
 }

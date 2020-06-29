@@ -1,6 +1,5 @@
 #include "wolf3d.h"
 
-
 char	**read_map(char *filename)
 {
 	int		fd;
